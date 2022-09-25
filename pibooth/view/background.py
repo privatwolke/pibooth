@@ -208,7 +208,7 @@ class IntroBackground(Background):
             if self.arrow_location == ARROW_TOUCH:
                 size = (self._rect.width * 0.2, self._rect.height * 0.2)
 
-                self.left_arrow = pictures.get_pygame_image("camera.png", size, vflip=False, color=self._text_color)
+                self.left_arrow = pictures.get_pygame_image("camera.png", size, vflip=False, color=None)
 
                 x = int(self._rect.width * 0.2)
                 y = int(self._rect.height // 2)
@@ -445,9 +445,9 @@ class CaptureBackground(Background):
             size = (images_height * 2, images_height)
 
             self.left_people = pictures.get_pygame_image("capture_left.png", size=size,
-                                                         color=self._text_color)
+                                                         color=None)
             self.right_people = pictures.get_pygame_image("capture_right.png", size=size,
-                                                          color=self._text_color)
+                                                          color=None)
 
             x = int(self._rect.right - size[0])
             y = int(self._rect.bottom - images_height)
@@ -604,9 +604,9 @@ class FinishedBackground(Background):
             right_rect.right = self._rect.right - 10
 
             self.left_people = pictures.get_pygame_image("finished_left.png", size=left_rect.size,
-                                                         color=self._text_color)
+                                                         color=None)
             self.right_people = pictures.get_pygame_image("finished_right.png", size=right_rect.size,
-                                                          color=self._text_color)
+                                                          color=None)
 
             self.left_people_pos = self.left_people.get_rect(center=left_rect.center).topleft
             self.right_people_pos = self.right_people.get_rect(center=right_rect.center).topleft
@@ -663,9 +663,9 @@ class FinishedWithImageBackground(FinishedBackground):
             right_rect.right = self._rect.right
 
             self.left_people = pictures.get_pygame_image("finished_left.png", size=left_rect.size,
-                                                         color=self._text_color)
+                                                         color=None)
             self.right_people = pictures.get_pygame_image("finished_right.png", size=right_rect.size,
-                                                          color=self._text_color)
+                                                          color=None)
 
             self.left_people_pos = self.left_people.get_rect(center=left_rect.center).topleft
             self.right_people_pos = self.right_people.get_rect(center=right_rect.center).topleft
