@@ -77,7 +77,7 @@ def worker(token=None):
 
         try:
             buffer = BytesIO()
-            image.thumbnail(2000, 2000)
+            image.thumbnail((2000, 2000))
             image.save(buffer, format='JPEG', quality=90, exif=piexif.dump({
                 'GPS': GPS_EXIF,
                 'Exif': {
