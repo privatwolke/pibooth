@@ -117,8 +117,8 @@ class CustomPictureFactory(OpenCvPictureFactory):
         if self._final:
             return self._final
 
-        if self._margin == 40:
-            # smaller margin -> generates pictures for animation
+        if self.width == 800:
+            # smaller pic -> generates pictures for animation
             return super().build(rebuild=rebuild)
 
         upload = not self._final
@@ -150,6 +150,7 @@ class CustomPictureFactory(OpenCvPictureFactory):
             UPLOAD_QUEUE.put((image, upload_filename))
 
         self._final = modified_image
+        print(modified_image.height, modified_image.width)
         return self._final
 
 
@@ -167,5 +168,5 @@ def pibooth_configure(cfg):
 @pibooth.hookimpl
 def pibooth_startup(app, cfg):
     threading.Thread(target=worker, daemon=True, kwargs={
-        'token': cfg.get('HOCHZEIT', 'upload_secret')
+        'token': cfg.get('Hochzeit', 'upload_secret')
     }).start()
