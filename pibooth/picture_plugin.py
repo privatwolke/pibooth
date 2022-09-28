@@ -77,7 +77,8 @@ def worker(token=None):
 
         try:
             buffer = BytesIO()
-            image.save(buffer, format='JPEG', quality=95, exif=piexif.dump({
+            image.thumbnail(2000, 2000)
+            image.save(buffer, format='JPEG', quality=90, exif=piexif.dump({
                 'GPS': GPS_EXIF,
                 'Exif': {
                     piexif.ExifIFD.DateTimeOriginal: arrow.utcnow().format('YYYY:MM:DD HH:mm:ss'),
