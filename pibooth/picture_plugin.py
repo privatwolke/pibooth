@@ -21,7 +21,7 @@ from pibooth.pictures.factory import OpenCvPictureFactory
 __version__ = '1.0.0'
 HASHIDS = Hashids(salt='pibooth-stephan', alphabet=string.ascii_uppercase)
 UPLOAD_QUEUE = queue.Queue()
-UPLOAD_URL = 'https://hochzeit.privatwolke.at/upload'
+UPLOAD_URL = 'https://fotobox.privatwolke.at/upload'
 
 
 def deg(value, loc):
@@ -86,7 +86,7 @@ def worker(token=None):
                 },
                 '0th': {
                     piexif.ImageIFD.Make: 'Fotobox',
-                    piexif.ImageIFD.Model: 'Stephan & Katharina',
+                    piexif.ImageIFD.Model: 'fotobox.privatwolke.at',
                 }
             }))
             buffer.seek(0)
@@ -133,16 +133,16 @@ class CustomPictureFactory(OpenCvPictureFactory):
         modified_image.paste(image, (0, 0))
 
         # make QR code and paste it onto the canvas
-        qr = pyqrcodeng.create(f'https://hochzeit.privatwolke.at/{upload_filename}')
+        qr = pyqrcodeng.create(f'https://fotobox.privatwolke.at/{upload_filename}')
         buffer = BytesIO()
         qr.png(buffer, scale=12)
         with Image.open(buffer) as qr_image:
             modified_image.paste(qr_image, (200, image.height + 15))
 
         # add explanation text
-        font = fonts.get_pil_font('hochzeit.privatwolke.at', fonts.get_filename('edwin'), image.width - 200, 100)
+        font = fonts.get_pil_font('fotobox.privatwolke.at', fonts.get_filename('edwin'), image.width - 200, 100)
         font2 = fonts.get_pil_font(upload_filename, fonts.get_filename('monolisa'), image.width - 200, 100)
-        draw.text((900, image.height + 150), 'hochzeit.privatwolke.at', fill='black', font=font)
+        draw.text((900, image.height + 150), 'fotobox.privatwolke.at', fill='black', font=font)
         draw.text((900, image.height + 350), f'Code:', fill='black', font=font)
         draw.text((1250, image.height + 330), upload_filename, fill='black', font=font2)
 
