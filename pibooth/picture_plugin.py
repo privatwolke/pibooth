@@ -51,8 +51,8 @@ def rational(number):
     f = Fraction(str(number))
     return f.numerator, f.denominator
 
-LAT = 48.2931606263629
-LNG = 14.286596939702166
+LAT = 47.8836288
+LNG = 14.1172314
 
 LAT_DEG = deg(LAT, ('S', 'N'))
 LNG_DEG = deg(LNG, ('W', 'E'))
@@ -80,8 +80,7 @@ def worker(token=None):
             image.save(buffer, format='JPEG', quality=90, exif=piexif.dump({
                 'GPS': GPS_EXIF,
                 'Exif': {
-                    piexif.ExifIFD.DateTimeOriginal: arrow.utcnow().format('YYYY:MM:DD HH:mm:ss'),
-                    piexif.ExifIFD.OffsetTimeOriginal: '00:00',
+                    piexif.ExifIFD.DateTimeOriginal: arrow.now().format('YYYY:MM:DD HH:mm:ss'),
                 },
                 '0th': {
                     piexif.ImageIFD.Make: 'Fotobox',
@@ -111,6 +110,8 @@ class CustomPictureFactory(OpenCvPictureFactory):
     def __init__(self, width, height, *images):
         self.cache = {}
         self.counter = int(time())
+        self.names = Image.open('pibooth/pictures/assets/names.png')
+        self.names_small = Image.open('pibooth/pictures/assets/names-small.png')
         super().__init__(width, height, *images)
 
     def build(self, rebuild=False) -> Image:
@@ -119,13 +120,16 @@ class CustomPictureFactory(OpenCvPictureFactory):
 
         if self.width == 800:
             # smaller pic -> generates pictures for animation
-            return super().build(rebuild=rebuild)
+            image = super().build(rebuild=rebuild)
+            image.paste(self.names_small, (20, image.height - 280))
+            return image
 
         upload = not self._final
         upload_filename = HASHIDS.encode(int(time()))
 
         # make image and paste it onto a bigger canvas
         image: Image = super().build(rebuild=rebuild)
+        image.paste(self.names, (200, image.height - 680))
         modified_image = Image.new('RGB', (image.width, image.height + 800))
         draw = ImageDraw.Draw(modified_image)
         draw.rectangle((0, 0, modified_image.width, modified_image.height), fill='white')
@@ -134,23 +138,22 @@ class CustomPictureFactory(OpenCvPictureFactory):
         # make QR code and paste it onto the canvas
         qr = pyqrcodeng.create(f'https://fotobox.privatwolke.at/{upload_filename}')
         buffer = BytesIO()
-        qr.png(buffer, scale=12)
+        qr.png(buffer, scale=15)
         with Image.open(buffer) as qr_image:
             modified_image.paste(qr_image, (200, image.height + 15))
 
         # add explanation text
         font = fonts.get_pil_font('fotobox.privatwolke.at', fonts.get_filename('edwin'), image.width - 200, 100)
         font2 = fonts.get_pil_font(upload_filename, fonts.get_filename('monolisa'), image.width - 200, 100)
-        draw.text((900, image.height + 150), 'fotobox.privatwolke.at', fill='black', font=font)
-        draw.text((900, image.height + 350), f'Code:', fill='black', font=font)
-        draw.text((1250, image.height + 330), upload_filename, fill='black', font=font2)
+        draw.text((900, image.height + 170), 'fotobox.privatwolke.at', fill='black', font=font)
+        draw.text((900, image.height + 370), f'Code:', fill='black', font=font)
+        draw.text((1250, image.height + 350), upload_filename, fill='black', font=font2)
 
         if upload:
             # queue the image for upload and cache it
             UPLOAD_QUEUE.put((image, upload_filename))
 
         self._final = modified_image
-        print(modified_image.height, modified_image.width)
         return self._final
 
 
