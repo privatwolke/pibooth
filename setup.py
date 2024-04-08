@@ -65,7 +65,7 @@ def main():
         python_requires=">=3.6",
         install_requires=[
             'picamera>=1.13 ; platform_machine>="armv0l" and platform_machine<="armv9l"',
-            'Pillow>=8.3.1',
+            'pillow==8.3.1',
             'pygame>=1.9.6',
             'pygame-menu==4.0.7',
             'pygame-vkeyboard>=2.0.8',
@@ -73,7 +73,12 @@ def main():
             'pluggy>=0.13.1',
             'gpiozero>=1.5.1',
             # RPi.GPIO backend for gpiozero (not always installed by default)
-            'RPi.GPIO>=0.7.0 ; platform_machine>="armv0l" and platform_machine<="armv9l"'
+            'RPi.GPIO>=0.7.0 ; platform_machine>="armv0l" and platform_machine<="armv9l"',
+            'arrow>=1.3.0',
+            'piexif>=1.1.3',
+            'pyqrcodeng>=1.3.6',
+            'hashids>=1.3.1',
+            'requests>=2.31.0',
         ],
         extras_require={
             'dslr': ['gphoto2>=2.0.0'],
