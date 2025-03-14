@@ -134,7 +134,7 @@ class CustomPictureFactory(OpenCvPictureFactory):
         # make QR code and paste it onto the canvas
         qr = pyqrcodeng.create(f'https://fotobox.privatwolke.at/{upload_filename}')
         buffer = BytesIO()
-        qr.png(buffer, scale=12)
+        qr.png(buffer, scale=15)
         with Image.open(buffer) as qr_image:
             modified_image.paste(qr_image, (200, image.height + 15))
 
@@ -142,7 +142,7 @@ class CustomPictureFactory(OpenCvPictureFactory):
         font = fonts.get_pil_font('fotobox.privatwolke.at', fonts.get_filename('edwin'), image.width - 200, 100)
         font2 = fonts.get_pil_font(upload_filename, fonts.get_filename('monolisa'), image.width - 200, 100)
         draw.text((900, image.height + 150), 'fotobox.privatwolke.at', fill='black', font=font)
-        draw.text((900, image.height + 350), f'Code:', fill='black', font=font)
+        draw.text((900, image.height + 350), 'Code:', fill='black', font=font)
         draw.text((1250, image.height + 330), upload_filename, fill='black', font=font2)
 
         if upload:
