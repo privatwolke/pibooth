@@ -51,8 +51,8 @@ def rational(number):
     f = Fraction(str(number))
     return f.numerator, f.denominator
 
-LAT = 48.2931606263629
-LNG = 14.286596939702166
+LAT = 48.087847
+LNG = 16.286939
 
 LAT_DEG = deg(LAT, ('S', 'N'))
 LNG_DEG = deg(LNG, ('W', 'E'))
