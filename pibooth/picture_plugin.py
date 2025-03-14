@@ -111,6 +111,8 @@ class CustomPictureFactory(OpenCvPictureFactory):
     def __init__(self, width, height, *images):
         self.cache = {}
         self.counter = int(time())
+        self.names = Image.open('pibooth/pictures/assets/namen.png')
+        self.names_small = Image.open('pibooth/pictures/assets/namen-small.png')
         super().__init__(width, height, *images)
 
     def build(self, rebuild=False) -> Image:
@@ -119,13 +121,16 @@ class CustomPictureFactory(OpenCvPictureFactory):
 
         if self.width == 800:
             # smaller pic -> generates pictures for animation
-            return super().build(rebuild=rebuild)
+            image = super().build(rebuild=rebuild)
+            image.paste(self.names_small, (20, image.height - 280))
+            return image
 
         upload = not self._final
         upload_filename = HASHIDS.encode(int(time()))
 
         # make image and paste it onto a bigger canvas
         image: Image = super().build(rebuild=rebuild)
+        image.paste(self.names, (200, image.height - 680))
         modified_image = Image.new('RGB', (image.width, image.height + 800))
         draw = ImageDraw.Draw(modified_image)
         draw.rectangle((0, 0, modified_image.width, modified_image.height), fill='white')
@@ -150,7 +155,6 @@ class CustomPictureFactory(OpenCvPictureFactory):
             UPLOAD_QUEUE.put((image, upload_filename))
 
         self._final = modified_image
-        print(modified_image.height, modified_image.width)
         return self._final
 
 
